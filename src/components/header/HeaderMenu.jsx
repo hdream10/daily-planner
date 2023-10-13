@@ -1,7 +1,20 @@
 import { View } from "react-native";
-import { Menu, Divider, Text, Appbar } from "react-native-paper";
+import { Menu, Appbar } from "react-native-paper";
+import { useControlTask } from "../../store/controlTask.store";
 
 const HeaderMenu = ({ menuVisible, setMenuVisible }) => {
+  const setTasks = useControlTask().setTasks;
+
+  const pressHandler = async () => {
+    try {
+      setMenuVisible(false);
+      await AsyncStorage.clear();
+      setTasks([]);
+    } catch (error) {
+      console.error("Ошибка при очистке AsyncStorage:", error);
+    }
+  };
+
   return (
     <View
       style={{
@@ -19,12 +32,7 @@ const HeaderMenu = ({ menuVisible, setMenuVisible }) => {
           <Appbar.Action icon="menu" onPress={() => setMenuVisible(true)} />
         }
       >
-        <Text style={{ textAlign: "center", paddingBottom: 8 }}>
-          Тема
-        </Text>
-        <Divider />
-        <Menu.Item onPress={() => {}} title="Dark" />
-        <Menu.Item onPress={() => {}} title="Light" />
+        <Menu.Item onPress={pressHandler} title="Удалить все задачи" />
       </Menu>
     </View>
   );

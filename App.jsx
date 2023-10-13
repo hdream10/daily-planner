@@ -5,8 +5,27 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { PaperProvider } from "react-native-paper";
 import AddBtn from "./src/components/UI/addBtn/AddBtn";
+import EditTask from "./src/screens/EditTask";
+import { useControlTask } from "./src/store/controlTask.store";
+import { useEffect } from "react";
+import { useState } from "react";
+import moment from "moment";
 
 export default function App() {
+  const { editScreen, editTaskMode, currentDate } = useControlTask();
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
+  const addTaskHandler = () => {
+    editTaskMode();
+  };
+
+  useEffect(() => {
+    if (!currentDate) return;
+    const nowDate = moment().format("DD-MM-YYYY");
+    const formatCurrentDate = moment(currentDate, "DD-MM-YYYY", true).toDate();
+    setBtnDisabled(formatCurrentDate < moment(nowDate, "DD-MM-YYYY"));
+  }, [currentDate]);
+
   return (
     <SafeAreaProvider>
       <PaperProvider>
@@ -14,9 +33,11 @@ export default function App() {
         <View style={styles.page}>
           <Header />
           <ScrollView contentContainerStyle={styles.container}>
-            <TaskList />
+            {editScreen.mode ? <EditTask /> : <TaskList />}
           </ScrollView>
-          <AddBtn />
+          {!editScreen.mode && (
+            <AddBtn onPress={addTaskHandler} isDisabled={btnDisabled} />
+          )}
         </View>
       </PaperProvider>
     </SafeAreaProvider>
