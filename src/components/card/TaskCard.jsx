@@ -7,7 +7,7 @@ import { postTask } from "../../service/postTask";
 import { useEffect } from "react";
 
 const TaskCard = ({ card, isDisabled = false }) => {
-  const { editTaskMode, setDeleteMode, setTasks } = useControlTask();
+  const { editTaskMode, setModal, setTasks } = useControlTask();
 
   const [expanded, setExpanded] = useState(false);
   const [checked, setChecked] = useState(card.status);
@@ -25,13 +25,21 @@ const TaskCard = ({ card, isDisabled = false }) => {
   }, [card.status]);
 
   const handleCheckboxToggle = async () => {
-    const cards = await postTask({ ...card, status: !checked });
+    const cards = await postTask({
+      ...card,
+      status: !checked,
+      statusInfo: {
+        time: "",
+        description: "",
+      },
+    });
+    if (!checked) setModal({ ...card, status: !checked }, "editStatus");
     setChecked(!checked);
     setTasks(cards);
   };
 
   const deleteHandler = () => {
-    setDeleteMode(card);
+    setModal(card, "delete");
   };
 
   return (
@@ -60,8 +68,26 @@ const TaskCard = ({ card, isDisabled = false }) => {
             />
           </View>
         </View>
-        {expanded && card.description && (
-          <Text style={cardStyles.taskDescription}>{card.description}</Text>
+        {expanded && (
+          <>
+            {card.description && (
+              <Text style={cardStyles.taskDescription}>
+                Описание: {card.description}
+              </Text>
+            )}
+
+            {card?.statusInfo?.time && (
+              <Text style={cardStyles.taskDescription}>
+                Время выполнения: {card?.statusInfo?.time} мин.
+              </Text>
+            )}
+
+            {card?.statusInfo?.description && (
+              <Text style={cardStyles.taskDescription}>
+                Примечание: {card?.statusInfo?.description}
+              </Text>
+            )}
+          </>
         )}
       </Card.Content>
     </Card>

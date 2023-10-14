@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { getTasksByDate } from "../service/getTasksByDate";
 import moment from "moment";
 import { useControlTask } from "../store/controlTask.store";
+import ConfirmCheck from "../components/ConfirmCheck/ConfirmCheck";
 
 const TaskList = () => {
   const {
@@ -33,6 +34,7 @@ const TaskList = () => {
       {tasks &&
         tasks.map((card, index) => <TaskCard key={index} card={card} />)}
       <ConfirmationDelete />
+      <ConfirmCheck />
     </View>
   );
 };

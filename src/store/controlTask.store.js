@@ -10,8 +10,9 @@ const clearTask = {
 };
 
 export const useControlTask = create()((set) => ({
-  modalDelete: {
+  modalState: {
     mode: false,
+    type: "",
     task: {},
   },
   editScreen: {
@@ -23,11 +24,11 @@ export const useControlTask = create()((set) => ({
   searchQueryStore: "",
   filterValue: "",
 
-  setDeleteMode: (task) =>
-    set(() => ({ modalDelete: { mode: true, task: task } })),
+  setModal: (task, type) =>
+    set(() => ({ modalState: { mode: true, type: type, task: task } })),
 
-  removeDeleteMode: () =>
-    set(() => ({ modalDelete: { mode: false, task: {} } })),
+  removeModal: () =>
+    set(() => ({ modalState: { mode: false, type: "", task: {} } })),
 
   editTaskMode: (task) =>
     set(() => ({

@@ -6,22 +6,23 @@ import { useControlTask } from "../../store/controlTask.store";
 import { deleteTask } from "../../service/deleteTask";
 
 const ConfirmationDelete = () => {
-  const { modalDelete, removeDeleteMode, setTasks } = useControlTask();
+  const { modalState, removeModal, setTasks } = useControlTask();
   const [visible, setVisible] = useState(false);
 
   const hideDialog = () => {
-    removeDeleteMode();
+    setVisible(false);
+    removeModal();
   };
 
   const confirmDelete = async () => {
-    const cards = await deleteTask(modalDelete.task);
-    setTasks(cards)
-    removeDeleteMode();
+    const cards = await deleteTask(modalState.task);
+    setTasks(cards);
+    hideDialog();
   };
 
   useEffect(() => {
-    setVisible(modalDelete.mode);
-  }, [modalDelete.mode]);
+    if (modalState.type === "delete") setVisible(modalState.mode);
+  }, [modalState.mode]);
 
   return (
     <Portal>
@@ -29,7 +30,7 @@ const ConfirmationDelete = () => {
         <Dialog.Title>Удаление задачи</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">
-            Вы уверены, что хотите удалить задачу "{modalDelete.task.title}"?
+            Вы уверены, что хотите удалить задачу "{modalState.task.title}"?
           </Text>
         </Dialog.Content>
         <View style={{ flexDirection: "row" }}>
