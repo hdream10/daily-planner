@@ -74,9 +74,6 @@ const ConfirmCheck = () => {
         </View>
         <View style={{ flexDirection: "row" }}>
           <Dialog.Actions>
-            <Button onPress={hideDialog}>Отмена</Button>
-          </Dialog.Actions>
-          <Dialog.Actions>
             <Button onPress={confirmHandler}>Сохранить</Button>
           </Dialog.Actions>
         </View>
