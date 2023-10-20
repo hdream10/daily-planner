@@ -46,6 +46,7 @@ const Calendar = ({ open, setOpen }) => {
       onDismiss={onDismissSingle}
       date={date}
       onConfirm={onConfirmSingle}
+      saveLabel="Выбрать"
     />
   );
 };
